@@ -1,3 +1,32 @@
 spring:
   application:
     name: student-system-information
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studentsystem
+    username: postgres
+    password: password123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  # Google OAuth2 konfiguracija
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: YOUR_GOOGLE_CLIENT_ID
+            client-secret: YOUR_GOOGLE_CLIENT_SECRET
+            scope:
+              - email
+              - profile
+
+# Custom konfiguracija za JWT
+application:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      expiration: 1800000 # 30 minuta u milisekundama
