@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="93c53332-cc04-457a-9e73-acf55302aa8b" name="Changes" comment="feat/auth-foundation-and-user-model">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mvnw.cmd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/StudentSystemInformationApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/config/ApplicationConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/config/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/config/SecurityConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/AcademicController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/AdminUserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/AuthenticationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/FacultyController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/StudentController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/StudentDashboardController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/academic/AcademicYear.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/academic/Course.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/academic/CourseAssignment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/academic/Program.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/academic/StudentEnrollment.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/enums/AuthProvider.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/enums/FacultyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/enums/Role.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/enums/StudentType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/model/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/ErrorResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/auth/AuthenticationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/auth/AuthenticationResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/auth/RegisterRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/user/AdminCreateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/user/UserDto.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/payload/user/UserUpdateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/repository/academic/AcademicYearRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/repository/academic/CourseAssignmentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/repository/academic/CourseRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/repository/academic/ProgramRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/repository/academic/StudentEnrollmentRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/security/JwtAuthenticationEntryPoint.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/security/JwtAuthenticationFilter.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/security/JwtService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/service/AcademicService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/service/AdminUserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/service/AuthenticationService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/service/LogoutService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/tariketf/student_system_information/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/tariketf/student_system_information/StudentSystemInformationApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="Interface" />
+        <option value="Class" />
+        <option value="package.json" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;taariikkk&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/taariikkk/student-information-system.git&quot;,
+    &quot;accountId&quot;: &quot;180fd242-6d6a-44d8-ab06-3b80954d25af&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="39a52u80KkmL0pNIT6tow2AWnKB" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.StudentSystemInformationApplication.executor": "Run",
+    "git-widget-placeholder": "feat/frontend-setup-vite",
+    "last_opened_file_path": "/home/tarik/Desktop/student-information-system/server",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="StudentSystemInformationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="student-system" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.tariketf.student_system_information.StudentSystemInformationApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-2fc7cc6b9a17-intellij.indexing.shared.core-IU-253.31033.145" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-IU-253.31033.145" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="93c53332-cc04-457a-9e73-acf55302aa8b" name="Changes" comment="" />
+      <created>1770921137410</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770921137410</updated>
+      <workItem from="1770921138965" duration="1159000" />
+      <workItem from="1770929131729" duration="3590000" />
+      <workItem from="1771096694276" duration="1400000" />
+      <workItem from="1771160264998" duration="4157000" />
+      <workItem from="1771421984191" duration="142000" />
+      <workItem from="1771941642332" duration="5848000" />
+      <workItem from="1771955422422" duration="5622000" />
+      <workItem from="1771969489509" duration="3957000" />
+      <workItem from="1772024976854" duration="5819000" />
+    </task>
+    <task id="LOCAL-00001" summary="Initial commit - Student System project setup">
+      <option name="closed" value="true" />
+      <created>1770921505494</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1770921505496</updated>
+    </task>
+    <task id="LOCAL-00002" summary="feat/auth-foundation-and-user-model">
+      <option name="closed" value="true" />
+      <created>1770922063515</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1770922063515</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".env" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Initial commit - Student System project setup" />
+    <MESSAGE value="feat/auth-foundation-and-user-model" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat/auth-foundation-and-user-model" />
+  </component>
+</project>
