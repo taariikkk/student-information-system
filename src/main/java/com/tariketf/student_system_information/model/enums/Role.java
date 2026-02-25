@@ -1,8 +1,11 @@
 package com.tariketf.student_system_information.model.enums;
 
 public enum Role {
-    STUDENT,
-    PROFESSOR,
+    SUPER_ADMIN,
     ADMIN,
-    ASSISTANT
+    DEAN,
+    VICE_DEAN,
+    SECRETARY,
+    FACULTY,
+    STUDENT
 }
