@@ -1,7 +1,9 @@
 package com.tariketf.student_system_information.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.tariketf.student_system_information.model.enums.FacultyType;
 import com.tariketf.student_system_information.model.enums.Role;
+import com.tariketf.student_system_information.model.enums.StudentType;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -43,18 +45,31 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    // Pod-uloga za nastavno osoblje
+    @Enumerated(EnumType.STRING)
+    @Column(name = "faculty_type")
+    private FacultyType facultyType;
+
+    // Pod-uloga za studente
+    @Enumerated(EnumType.STRING)
+    @Column(name = "student_type")
+    private StudentType studentType;
+
     // --- Konstruktori ---
 
     public User() {
     }
 
-    public User(String email, String phoneNumber, String password, String firstName, String lastName, Role role) {
+    public User(String email, String phoneNumber, String password, String firstName,
+                String lastName, Role role, FacultyType facultyType, StudentType studentType) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+        this.facultyType = facultyType;
+        this.studentType = studentType;
     }
 
     // --- Getteri i Setteri ---
@@ -125,6 +140,22 @@ public class User implements UserDetails {
 
     public void setDateOfBirth(LocalDate dateOfBirth){
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public FacultyType getFacultyType() {
+        return facultyType;
+    }
+
+    public void setFacultyType(FacultyType facultyType) {
+        this.facultyType = facultyType;
+    }
+
+    public StudentType getStudentType() {
+        return studentType;
+    }
+
+    public void setStudentType(StudentType studentType) {
+        this.studentType = studentType;
     }
 
     // --- UserDetails Metode ---
