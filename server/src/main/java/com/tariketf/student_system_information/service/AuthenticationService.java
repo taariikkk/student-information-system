@@ -6,6 +6,7 @@ import com.tariketf.student_system_information.model.repository.UserRepository;
 import com.tariketf.student_system_information.payload.auth.AuthenticationRequest;
 import com.tariketf.student_system_information.payload.auth.AuthenticationResponse;
 import com.tariketf.student_system_information.payload.auth.RegisterRequest;
+import com.tariketf.student_system_information.payload.user.UserDto;
 import com.tariketf.student_system_information.security.JwtService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -46,21 +47,21 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(mapToUserDto(user))
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        // 1. Pokušaj naći korisnika po Emailu ILI Telefonu
+        // Pokušaj naći korisnika po Emailu ILI Telefonu
         var userOptional = userRepository.findByEmail(request.getEmail());
 
         if (userOptional.isEmpty()) {
-            // Ako nije nađen po emailu, traži po broju telefona (polje u requestu se i dalje zove 'email')
             userOptional = userRepository.findByPhoneNumber(request.getEmail());
         }
 
         var user = userOptional.orElseThrow(() -> new RuntimeException("Korisnik nije pronađen"));
 
-        // 2. Autentifikacija
+        // Autentifikacija
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(), // Ovo vraća email
@@ -68,11 +69,23 @@ public class AuthenticationService {
                 )
         );
 
-        // 3. Generisanje tokena
+        // Generisanje tokena
         var jwtToken = jwtService.generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .user(mapToUserDto(user))
+                .build();
+    }
+
+    private UserDto mapToUserDto(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 }

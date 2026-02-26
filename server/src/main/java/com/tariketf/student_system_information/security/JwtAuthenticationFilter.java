@@ -1,5 +1,6 @@
 package com.tariketf.student_system_information.security;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    // Ručni konstruktor (Dependency Injection)
     public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
@@ -34,58 +34,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // 1. Dohvati Authorization header
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        final String userEmail;
+        String userEmail = null; // Promijenjeno u var koja se može mijenjati
 
-        // Ako header ne postoji ili ne počinje sa "Bearer ", nastavi dalje (možda je login ruta)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        // Izvuci sam token (bez "Bearer " dijela)
         jwt = authHeader.substring(7);
 
-        // Izvuci email iz tokena
-        userEmail = jwtService.extractUsername(jwt);
+        // --- POPRAVAK POČINJE OVDJE ---
+        try {
+            userEmail = jwtService.extractUsername(jwt);
+        } catch (ExpiredJwtException e) {
+            // Ako je token istekao, ignorišemo ga i puštamo zahtjev dalje kao "neautorizovan".
+            // Spring Security će odlučiti da li pustiti korisnika (npr. na /login) ili vratiti 403.
+            System.out.println("Token je istekao, nastavljam kao anoniman korisnik.");
+        } catch (Exception e) {
+            // Za ostale greške (malformiran token itd.)
+            System.out.println("Greška prilikom parsiranja tokena: " + e.getMessage());
+        }
+        // --- KRAJ POPRAVKA ---
 
-        // 2. Ako imamo email i korisnik još nije autentifikovan u kontekstu
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            // Učitaj detalje korisnika iz baze
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            // 3. Provjeri da li je token validan
+            // Ovdje ponovo provjeravamo validnost, ali extractUsername iznad bi već bacio error
+            // tako da je ovo dodatna sigurnost.
             if (jwtService.isTokenValid(jwt, userDetails)) {
-
-                // Kreiraj autentifikaciju za Spring Security
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,
                         userDetails.getAuthorities()
                 );
-
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
-
-                // Postavi korisnika kao ulogovanog
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-
-                // --- SPRINT ZAHTJEV C: PRODUŽI TOKEN ---
-                // Generiši NOVI token sa svježih 30 minuta
-                String freshToken = jwtService.generateToken(userDetails);
-
-                // Dodaj novi token u response header da ga frontend može pokupiti
-                response.setHeader("Authorization", "Bearer " + freshToken);
-                // Ovo omogućava frontendu da pročita ovaj header (CORS)
-                response.setHeader("Access-Control-Expose-Headers", "Authorization");
             }
         }
-
-        // Nastavi lanac filtera
         filterChain.doFilter(request, response);
     }
 }

@@ -1,0 +1,25 @@
+# ======================
+# IntelliJ
+# ======================
+.idea/
+*.iml
+
+# ======================
+# Node / React
+# ======================
+client/node_modules/
+client/dist/
+client/.vite/
+client/.idea/
+
+# Logs
+*.log
+
+# ======================
+# Spring Boot / Maven
+# ======================
+server/target/
+server/.idea/
+
+# OS files
+.DS_Store
