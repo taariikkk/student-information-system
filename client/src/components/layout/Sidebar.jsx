@@ -34,6 +34,7 @@ const Sidebar = () => {
                         <div className="mt-4 mb-2 text-xs uppercase text-gray-600 font-bold">Admin</div>
                         <NavItem to="/admin/users" label="Korisnici" />
                         <NavItem to="/admin/academic-years" label="Akademske Godine" />
+                        <NavItem to="/admin/academic-structure" label="Akademska Struktura" />
                     </>
                 )}
 

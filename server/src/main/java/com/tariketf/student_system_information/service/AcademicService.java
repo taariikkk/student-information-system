@@ -108,4 +108,8 @@ public class AcademicService {
                 .role(user.getRole())
                 .build();
     }
+
+    public List<AcademicYear> getAllYears() { return yearRepo.findAll(); }
+    public List<Program> getAllPrograms() { return programRepo.findAll(); }
+    public List<Course> getAllCourses() { return courseRepo.findAll(); }
 }
