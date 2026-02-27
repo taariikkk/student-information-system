@@ -3,10 +3,15 @@ package com.tariketf.student_system_information.controller;
 import com.tariketf.student_system_information.model.academic.AcademicYear;
 import com.tariketf.student_system_information.model.academic.Course;
 import com.tariketf.student_system_information.model.academic.Program;
+import com.tariketf.student_system_information.payload.academic.AcademicYearRequest;
+import com.tariketf.student_system_information.payload.academic.CourseRequest;
+import com.tariketf.student_system_information.payload.academic.ProgramRequest;
 import com.tariketf.student_system_information.service.AcademicService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/academic")
@@ -18,30 +23,50 @@ public class AcademicController {
         this.academicService = academicService;
     }
 
+    // --- GET METODE (Dohvatanje) ---
+
+    @GetMapping("/years")
+    public ResponseEntity<List<AcademicYear>> getAllYears() {
+        return ResponseEntity.ok(academicService.getAllYears());
+    }
+
+    @GetMapping("/programs")
+    public ResponseEntity<List<Program>> getAllPrograms() {
+        return ResponseEntity.ok(academicService.getAllPrograms());
+    }
+
+    @GetMapping("/courses")
+    public ResponseEntity<List<Course>> getAllCourses() {
+        return ResponseEntity.ok(academicService.getAllCourses());
+    }
+
+    // --- POST METODE (Kreiranje - NOVE VERZIJE SA JSON) ---
+
     @PostMapping("/years")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<AcademicYear> createYear(@RequestParam String name) {
-        return ResponseEntity.ok(academicService.createAcademicYear(name));
+    public ResponseEntity<AcademicYear> createYear(@RequestBody AcademicYearRequest request) {
+        return ResponseEntity.ok(academicService.createAcademicYear(request.getName()));
     }
 
     @PostMapping("/programs")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<Program> createProgram(@RequestParam String name, @RequestParam int duration) {
-        return ResponseEntity.ok(academicService.createProgram(name, duration));
+    public ResponseEntity<Program> createProgram(@RequestBody ProgramRequest request) {
+        return ResponseEntity.ok(academicService.createProgram(request.getName(), request.getDuration()));
     }
 
     @PostMapping("/courses")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<Course> createCourse(
-            @RequestParam String name,
-            @RequestParam int ects,
-            @RequestParam String syllabus,
-            @RequestParam Long programId
-    ) {
-        return ResponseEntity.ok(academicService.createCourse(name, ects, syllabus, programId));
+    public ResponseEntity<Course> createCourse(@RequestBody CourseRequest request) {
+        return ResponseEntity.ok(academicService.createCourse(
+                request.getName(),
+                request.getEcts(),
+                request.getSyllabus(),
+                request.getProgramId()
+        ));
     }
 
-    // Dodjela profesora
+    // --- METODE ZA POVEZIVANJE (Ostaju iste ako ih nisi mijenjao u JSON) ---
+
     @PostMapping("/courses/{courseId}/assign-teacher/{teacherId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<String> assignTeacher(
@@ -53,7 +78,6 @@ public class AcademicController {
         return ResponseEntity.ok("Uspješno dodijeljen profesor na predmet!");
     }
 
-    // Upis studenta (Mogu i Super Admin i Admin)
     @PostMapping("/courses/{courseId}/enroll-student/{studentId}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<String> enrollStudent(
