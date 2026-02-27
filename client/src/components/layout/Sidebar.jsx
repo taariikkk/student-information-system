@@ -24,6 +24,7 @@ const Sidebar = () => {
                     <>
                         <NavItem to="/faculty/courses" label="Moji Kursevi" />
                         <NavItem to="/faculty/schedule" label="Raspored" />
+                        <NavItem to="/admin/users" label="Korisnici" />
                     </>
                 )}
 
