@@ -5,11 +5,11 @@ import com.tariketf.student_system_information.payload.user.UserDto;
 import com.tariketf.student_system_information.service.AdminUserService;
 import com.tariketf.student_system_information.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -31,5 +31,11 @@ public class AdminUserController {
         UserDto currentUser = userService.getUserProfile(currentEmail);
 
         return ResponseEntity.ok(adminUserService.createUser(request, currentUser.getRole()));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(adminUserService.getAllUsers());
     }
 }
