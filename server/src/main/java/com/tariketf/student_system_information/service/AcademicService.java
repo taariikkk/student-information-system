@@ -97,6 +97,18 @@ public class AcademicService {
                 .collect(Collectors.toList());
     }
 
+    public List<AcademicYear> getAllYears(){
+        return yearRepo.findAll();
+    }
+
+    public List<Program> getAllPrograms(){
+        return programRepo.findAll();
+    }
+
+    public List<Course> getAllCourses(){
+        return courseRepo.findAll();
+    }
+
     // Pomoćna metoda za mapiranje User -> UserDto
     private UserDto mapToDto(User user) {
         return UserDto.builder()

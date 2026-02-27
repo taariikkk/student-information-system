@@ -6,7 +6,7 @@ const Sidebar = () => {
 
     return (
         <div className="w-64 h-screen bg-slate-900 text-white p-6 hidden md:flex flex-col">
-            <h2 className="text-2xl font-bold mb-10 text-indigo-400">SIS <span className="text-xs text-gray-500">v1.0</span></h2>
+            <h2 className="text-2xl font-bold mb-10 text-indigo-400">ETF <span className="text-xs text-gray-500">v1.0</span></h2>
 
             <nav className="flex flex-col gap-2 text-gray-400 font-medium">
                 <NavItem to="/" label="Dashboard" />
@@ -34,6 +34,7 @@ const Sidebar = () => {
                         <div className="mt-4 mb-2 text-xs uppercase text-gray-600 font-bold">Admin</div>
                         <NavItem to="/admin/users" label="Korisnici" />
                         <NavItem to="/admin/academic-years" label="Akademske Godine" />
+                        <NavItem to="/admin/academic-structure" label="Akademska Struktura" />
                     </>
                 )}
 
