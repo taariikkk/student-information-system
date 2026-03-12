@@ -4,7 +4,9 @@ import com.tariketf.student_system_information.model.User;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "course_assignments")
+@Table(name = "course_assignments", uniqueConstraints = {
+        @UniqueConstraint(
+                columnNames = {"course_id", "teacher_id", "academic_year_id"})})
 public class CourseAssignment {
 
     @Id

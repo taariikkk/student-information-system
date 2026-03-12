@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "../../components/ui/Button";
 import Input from "../../components/ui/Input";
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 import {
     getAllYears, createYear,
     getAllPrograms, createProgram,
@@ -131,9 +132,14 @@ const AcademicStructure = () => {
                         <h3 className="font-bold mb-4">Postojeći Kursevi</h3>
                         <ul>
                             {courses.map(c => (
-                                <li key={c.id} className="p-2 border-b">
-                                    <div className="font-medium">{c.name} ({c.ectsPoints} ECTS)</div>
-                                    <div className="text-xs text-gray-500">{c.program?.name}</div>
+                                <li key={c.id} className="p-2 border-b flex justify-between items-center">
+                                    <div>
+                                        <Link to={`/admin/courses/${c.id}`} className="font-medium text-indigo-600 hover:underline">
+                                            {c.name} ({c.ectsPoints} ECTS)
+                                        </Link>
+                                        <div className="text-xs text-gray-500">{c.program?.name}</div>
+                                    </div>
+                                    {/* ... */}
                                 </li>
                             ))}
                         </ul>

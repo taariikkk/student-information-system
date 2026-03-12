@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AcademicYearRepository extends JpaRepository<AcademicYear, Long> {
     Optional<AcademicYear> findByName(String name);
-    Optional<AcademicYear> findByActiveTrue(); // Za pronalaženje trenutno aktivne godine
+    Optional<AcademicYear> findByActiveTrue();
 }

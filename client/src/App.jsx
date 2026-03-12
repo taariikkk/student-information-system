@@ -5,6 +5,7 @@ import Home from './pages/auth/Home.jsx';
 import Layout from './components/layout/Layout.jsx';
 import Users from './pages/admin/Users.jsx';
 import AcademicStructure from './pages/admin/AcademicStructure.jsx';
+import CourseDetails from './pages/admin/CourseDetails.jsx';
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/admin/users" element={<Users />} />
                 <Route path="/admin/academic-structure" element={<AcademicStructure />} />
+                <Route path="/admin/courses/:id" element={<CourseDetails />} />
             </Route>
         </Routes>
     );
