@@ -8,10 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CourseAssignmentRepository extends JpaRepository<CourseAssignment, Long> {
-    // Efikasna metoda za dohvat profesora na kursu u određenoj godini
     List<CourseAssignment> findByCourseIdAndAcademicYearId(Long courseId, Long academicYearId);
-
-    // Ostale metode...
     List<CourseAssignment> findByCourseId(Long courseId);
     List<CourseAssignment> findByTeacherId(Long teacherId);
     List<CourseAssignment> findByTeacherIdAndAcademicYearId(Long teacherId, Long academicYearId);

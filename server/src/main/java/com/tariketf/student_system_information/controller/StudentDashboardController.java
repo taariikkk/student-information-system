@@ -18,7 +18,6 @@ public class StudentDashboardController {
         this.academicService = academicService;
     }
 
-    // Students will be able to check faculty assigned to the course
     @GetMapping("/courses/{courseId}/teachers")
     @PreAuthorize("hasAnyRole('STUDENT', 'SUPER_ADMIN')")
     public ResponseEntity<List<UserDto>> getTeachersForCourse(

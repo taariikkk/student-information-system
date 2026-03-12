@@ -18,7 +18,6 @@ public class FacultyController {
         this.academicService = academicService;
     }
 
-    // Profesor vidi listu studenata na predmetu
     @GetMapping("/course/{courseId}/students")
     @PreAuthorize("hasAnyRole('FACULTY', 'SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<List<UserDto>> getStudentsForCourse(

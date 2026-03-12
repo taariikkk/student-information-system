@@ -31,7 +31,7 @@ public class AcademicService {
         this.userRepo = userRepo;
     }
 
-    // Ovdje kreirano Akademske godine
+    // Akademske godine
     public AcademicYear createAcademicYear(String name){
         return yearRepo.save(new AcademicYear(name, true));
     }
@@ -41,11 +41,17 @@ public class AcademicService {
         return programRepo.save(new Program(name, duration));
     }
 
-    // Kreiranje Kursa (Course)
+    // Kreiranje Kursa
     public Course createCourse(String name, int ects, String syllabus, Long programId){
         Program program = programRepo.findById(programId)
                 .orElseThrow(() -> new RuntimeException("Program nije pronađen"));
         return courseRepo.save(new Course(name, ects, syllabus, program));
+    }
+
+    // Dohvat Kursa pod ID-em
+    public Course getCourseById(Long id){
+        return courseRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Kurs nije pronađen"));
     }
 
     // Dodjela Profesora na predmet
@@ -97,7 +103,6 @@ public class AcademicService {
                 .collect(Collectors.toList());
     }
 
-    // Pomoćna metoda za mapiranje User -> UserDto
     private UserDto mapToDto(User user) {
         return UserDto.builder()
                 .id(user.getId())
