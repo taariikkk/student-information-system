@@ -2,8 +2,6 @@ package com.tariketf.student_system_information.payload.academic;
 import lombok.Data;
 
 @Data
-public class ProgramRequest {
+public class SimpleNameRequest {
     private String name;
-    private int duration;
-    private Long programLevelId;
 }

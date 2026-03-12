@@ -1,6 +1,8 @@
 package com.tariketf.student_system_information.model.academic;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "courses")
@@ -19,17 +21,22 @@ public class Course {
     @Column(columnDefinition = "TEXT")
     private String syllabus;
 
-    @ManyToOne
-    @JoinColumn(name = "program_id")
-    private Program program;
+    // --- NOVO: Kurs sada može biti na više programa ---
+    @ManyToMany
+    @JoinTable(
+            name = "course_programs",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "program_id")
+    )
+    private Set<Program> programs = new HashSet<>();
 
     public Course() {}
 
-    public Course(String name, int ectsPoints, String syllabus, Program program) {
+    public Course(String name, int ectsPoints, String syllabus, Set<Program> programs) {
         this.name = name;
         this.ectsPoints = ectsPoints;
         this.syllabus = syllabus;
-        this.program = program;
+        this.programs = programs;
     }
 
     // Getteri i Setteri
@@ -41,6 +48,6 @@ public class Course {
     public void setEctsPoints(int ectsPoints) { this.ectsPoints = ectsPoints; }
     public String getSyllabus() { return syllabus; }
     public void setSyllabus(String syllabus) { this.syllabus = syllabus; }
-    public Program getProgram() { return program; }
-    public void setProgram(Program program) { this.program = program; }
+    public Set<Program> getPrograms() { return programs; }
+    public void setPrograms(Set<Program> programs) { this.programs = programs; }
 }
