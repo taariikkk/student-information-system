@@ -1,11 +1,7 @@
 package com.tariketf.student_system_information.controller;
 
-import com.tariketf.student_system_information.model.academic.AcademicYear;
-import com.tariketf.student_system_information.model.academic.Course;
-import com.tariketf.student_system_information.model.academic.Program;
-import com.tariketf.student_system_information.payload.academic.AcademicYearRequest;
-import com.tariketf.student_system_information.payload.academic.CourseRequest;
-import com.tariketf.student_system_information.payload.academic.ProgramRequest;
+import com.tariketf.student_system_information.model.academic.*;
+import com.tariketf.student_system_information.payload.academic.*;
 import com.tariketf.student_system_information.payload.user.UserDto;
 import com.tariketf.student_system_information.service.AcademicService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +20,17 @@ public class AcademicController {
         this.academicService = academicService;
     }
 
-    // GET METODE
+    // GET METODE (Dohvatanje)
+
+    @GetMapping("/levels")
+    public ResponseEntity<List<ProgramLevel>> getAllProgramLevels() {
+        return ResponseEntity.ok(academicService.getAllProgramLevels());
+    }
+
+    @GetMapping("/study-years")
+    public ResponseEntity<List<StudyYear>> getAllStudyYears() {
+        return ResponseEntity.ok(academicService.getAllStudyYears());
+    }
 
     @GetMapping("/years")
     public ResponseEntity<List<AcademicYear>> getAllYears() {
@@ -46,7 +52,20 @@ public class AcademicController {
         return ResponseEntity.ok(academicService.getCourseById(id));
     }
 
+
     // POST METODE
+
+    @PostMapping("/levels")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public ResponseEntity<ProgramLevel> createLevel(@RequestBody SimpleNameRequest request) {
+        return ResponseEntity.ok(academicService.createProgramLevel(request.getName()));
+    }
+
+    @PostMapping("/study-years")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public ResponseEntity<StudyYear> createStudyYear(@RequestBody SimpleNameRequest request) {
+        return ResponseEntity.ok(academicService.createStudyYear(request.getName()));
+    }
 
     @PostMapping("/years")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
@@ -57,7 +76,11 @@ public class AcademicController {
     @PostMapping("/programs")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<Program> createProgram(@RequestBody ProgramRequest request) {
-        return ResponseEntity.ok(academicService.createProgram(request.getName(), request.getDuration()));
+        return ResponseEntity.ok(academicService.createProgram(
+                request.getName(),
+                request.getDuration(),
+                request.getProgramLevelId()
+        ));
     }
 
     @PostMapping("/courses")
@@ -67,53 +90,38 @@ public class AcademicController {
                 request.getName(),
                 request.getEcts(),
                 request.getSyllabus(),
-                request.getProgramId()
+                request.getProgramIds()
         ));
     }
 
     // METODE ZA POVEZIVANJE
-
-    // SUPER_ADMIN dodjeljuje profesora kursu
     @PostMapping("/courses/{courseId}/assign-teacher/{teacherId}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<String> assignTeacher(
-            @PathVariable Long courseId,
-            @PathVariable Long teacherId,
-            @RequestParam Long yearId
-    ) {
+            @PathVariable Long courseId, @PathVariable Long teacherId, @RequestParam Long yearId) {
         academicService.assignTeacherToCourse(courseId, teacherId, yearId);
         return ResponseEntity.ok("Uspješno dodijeljen profesor na predmet!");
     }
 
-    // ADMIN upisuje studenta na kurs
     @PostMapping("/courses/{courseId}/enroll-student/{studentId}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<String> enrollStudent(
-            @PathVariable Long courseId,
-            @PathVariable Long studentId,
-            @RequestParam Long yearId
-    ) {
+            @PathVariable Long courseId, @PathVariable Long studentId, @RequestParam Long yearId) {
         academicService.enrollStudentToCourse(courseId, studentId, yearId);
         return ResponseEntity.ok("Uspješno upisan student na predmet!");
     }
 
-    // Admin vidi studente na kursu
     @GetMapping("/courses/{courseId}/students")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<List<UserDto>> getStudentsOnCourse(
-            @PathVariable Long courseId,
-            @RequestParam Long yearId
-    ) {
+            @PathVariable Long courseId, @RequestParam Long yearId) {
         return ResponseEntity.ok(academicService.getStudentsOnCourse(courseId, yearId));
     }
 
-    // Admin vidi profesore na kursu
     @GetMapping("/courses/{courseId}/teachers")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<List<UserDto>> getTeachersOnCourse(
-            @PathVariable Long courseId,
-            @RequestParam Long yearId
-    ) {
+            @PathVariable Long courseId, @RequestParam Long yearId) {
         return ResponseEntity.ok(academicService.getTeachersOnCourse(courseId, yearId));
     }
 }

@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
-        String userEmail = null; // Promijenjeno u var koja se može mijenjati
+        String userEmail = null;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -45,24 +45,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         jwt = authHeader.substring(7);
 
-        // --- POPRAVAK POČINJE OVDJE ---
         try {
             userEmail = jwtService.extractUsername(jwt);
         } catch (ExpiredJwtException e) {
-            // Ako je token istekao, ignorišemo ga i puštamo zahtjev dalje kao "neautorizovan".
-            // Spring Security će odlučiti da li pustiti korisnika (npr. na /login) ili vratiti 403.
             System.out.println("Token je istekao, nastavljam kao anoniman korisnik.");
         } catch (Exception e) {
-            // Za ostale greške (malformiran token itd.)
             System.out.println("Greška prilikom parsiranja tokena: " + e.getMessage());
         }
-        // --- KRAJ POPRAVKA ---
 
         if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
 
-            // Ovdje ponovo provjeravamo validnost, ali extractUsername iznad bi već bacio error
-            // tako da je ovo dodatna sigurnost.
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
@@ -73,6 +66,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+
+                String newToken = jwtService.generateToken(userDetails);
+
+                response.setHeader("Authorization", "Bearer " + newToken);
             }
         }
         filterChain.doFilter(request, response);

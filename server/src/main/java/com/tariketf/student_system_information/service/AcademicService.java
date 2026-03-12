@@ -8,7 +8,9 @@ import com.tariketf.student_system_information.repository.academic.*;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,88 +21,97 @@ public class AcademicService {
     private final CourseAssignmentRepository assignmentRepo;
     private final StudentEnrollmentRepository enrollmentRepo;
     private final UserRepository userRepo;
+    private final ProgramLevelRepository programLevelRepo;
+    private final StudyYearRepository studyYearRepo;
 
     public AcademicService(AcademicYearRepository yearRepo, ProgramRepository programRepo,
                            CourseRepository courseRepo, CourseAssignmentRepository assignmentRepo,
-                           StudentEnrollmentRepository enrollmentRepo, UserRepository userRepo) {
+                           StudentEnrollmentRepository enrollmentRepo, UserRepository userRepo,
+                           ProgramLevelRepository programLevelRepo, StudyYearRepository studyYearRepo) {
         this.yearRepo = yearRepo;
         this.programRepo = programRepo;
         this.courseRepo = courseRepo;
         this.assignmentRepo = assignmentRepo;
         this.enrollmentRepo = enrollmentRepo;
         this.userRepo = userRepo;
+        this.programLevelRepo = programLevelRepo;
+        this.studyYearRepo = studyYearRepo;
     }
 
-    // Akademske godine
+    // Program Levels & Study Years (SPRINT 3 - ZADATAK 1)
+    public ProgramLevel createProgramLevel(String name) {
+        return programLevelRepo.save(new ProgramLevel(name));
+    }
+    public List<ProgramLevel> getAllProgramLevels() { return programLevelRepo.findAll(); }
+
+    public StudyYear createStudyYear(String name) {
+        return studyYearRepo.save(new StudyYear(name));
+    }
+    public List<StudyYear> getAllStudyYears() { return studyYearRepo.findAll(); }
+
+
+    // Akademske Godine
     public AcademicYear createAcademicYear(String name){
         return yearRepo.save(new AcademicYear(name, true));
     }
+    public List<AcademicYear> getAllYears() { return yearRepo.findAll(); }
 
-    // Kreiranje Programa
-    public Program createProgram(String name, int duration){
-        return programRepo.save(new Program(name, duration));
+
+    // Programi
+    public Program createProgram(String name, int duration, Long programLevelId){
+        ProgramLevel level = null;
+        if (programLevelId != null) {
+            level = programLevelRepo.findById(programLevelId)
+                    .orElseThrow(() -> new RuntimeException("Program Level nije pronađen"));
+        }
+        return programRepo.save(new Program(name, duration, level));
     }
+    public List<Program> getAllPrograms() { return programRepo.findAll(); }
 
-    // Kreiranje Kursa
-    public Course createCourse(String name, int ects, String syllabus, Long programId){
-        Program program = programRepo.findById(programId)
-                .orElseThrow(() -> new RuntimeException("Program nije pronađen"));
-        return courseRepo.save(new Course(name, ects, syllabus, program));
+
+    // Kursevi (Sada prihvata više programa - ManyToMany)
+    @Transactional
+    public Course createCourse(String name, int ects, String syllabus, List<Long> programIds){
+        Set<Program> programs = new HashSet<>();
+        if (programIds != null && !programIds.isEmpty()) {
+            programs = new HashSet<>(programRepo.findAllById(programIds));
+        }
+        return courseRepo.save(new Course(name, ects, syllabus, programs));
     }
-
-    // Dohvat Kursa pod ID-em
+    public List<Course> getAllCourses() { return courseRepo.findAll(); }
     public Course getCourseById(Long id){
         return courseRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Kurs nije pronađen"));
     }
 
-    // Dodjela Profesora na predmet
 
+    // Dodjela Profesora i Studenata
     @Transactional
     public void assignTeacherToCourse(Long courseId, Long teacherId, Long academicYearId) {
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Predmet nije pronađen"));
-
-        User teacher = userRepo.findById(teacherId)
-                .orElseThrow(() -> new RuntimeException("Profesor nije pronađen"));
-
-        AcademicYear year = yearRepo.findById(academicYearId)
-                .orElseThrow(() -> new RuntimeException("Godina nije pronađena"));
-
-        CourseAssignment assignment = new CourseAssignment(course, teacher, year);
-        assignmentRepo.save(assignment);
+        Course course = courseRepo.findById(courseId).orElseThrow(() -> new RuntimeException("Predmet nije pronađen"));
+        User teacher = userRepo.findById(teacherId).orElseThrow(() -> new RuntimeException("Profesor nije pronađen"));
+        AcademicYear year = yearRepo.findById(academicYearId).orElseThrow(() -> new RuntimeException("Godina nije pronađena"));
+        assignmentRepo.save(new CourseAssignment(course, teacher, year));
     }
 
-    // Upis Studenta na Predmet (Enrollment)
     @Transactional
     public void enrollStudentToCourse(Long courseId, Long studentId, Long academicYearId) {
-        Course course = courseRepo.findById(courseId)
-                .orElseThrow(() -> new RuntimeException("Predmet nije pronađen"));
-
-        User student = userRepo.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student nije pronađen"));
-
-        AcademicYear year = yearRepo.findById(academicYearId)
-                .orElseThrow(() -> new RuntimeException("Godina nije pronađena"));
-
-        StudentEnrollment enrollment = new StudentEnrollment(course, student, year);
-        enrollmentRepo.save(enrollment);
+        Course course = courseRepo.findById(courseId).orElseThrow(() -> new RuntimeException("Predmet nije pronađen"));
+        User student = userRepo.findById(studentId).orElseThrow(() -> new RuntimeException("Student nije pronađen"));
+        AcademicYear year = yearRepo.findById(academicYearId).orElseThrow(() -> new RuntimeException("Godina nije pronađena"));
+        enrollmentRepo.save(new StudentEnrollment(course, student, year));
     }
 
-    // Profesor gleda studente
+
+    // Pregled Osoblja na Kursu
     public List<UserDto> getStudentsOnCourse(Long courseId, Long academicYearId) {
         return enrollmentRepo.findByCourseIdAndAcademicYearId(courseId, academicYearId)
-                .stream()
-                .map(enrollment -> mapToDto(enrollment.getStudent()))
-                .collect(Collectors.toList());
+                .stream().map(enrollment -> mapToDto(enrollment.getStudent())).collect(Collectors.toList());
     }
 
-    // Student gleda profesore
     public List<UserDto> getTeachersOnCourse(Long courseId, Long academicYearId) {
         return assignmentRepo.findByCourseIdAndAcademicYearId(courseId, academicYearId)
-                .stream()
-                .map(assignment -> mapToDto(assignment.getTeacher()))
-                .collect(Collectors.toList());
+                .stream().map(assignment -> mapToDto(assignment.getTeacher())).collect(Collectors.toList());
     }
 
     private UserDto mapToDto(User user) {
@@ -113,8 +124,4 @@ public class AcademicService {
                 .role(user.getRole())
                 .build();
     }
-
-    public List<AcademicYear> getAllYears() { return yearRepo.findAll(); }
-    public List<Program> getAllPrograms() { return programRepo.findAll(); }
-    public List<Course> getAllCourses() { return courseRepo.findAll(); }
 }
