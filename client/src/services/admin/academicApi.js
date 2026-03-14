@@ -9,8 +9,8 @@ export const createYear = (name) =>
 // --- PROGRAMI ---
 export const getAllPrograms = () =>
     axiosClient.get("/admin/academic/programs");
-export const createProgram = (name, duration) =>
-    axiosClient.post("/admin/academic/programs", { name, duration });
+export const createProgram = (name, duration, programLevelId) =>
+    axiosClient.post("/admin/academic/programs", { name, duration, programLevelId });
 
 // --- KURSEVI ---
 export const getAllCourses = () =>
@@ -41,3 +41,9 @@ export const enrollStudent = (courseId, studentId, yearId) =>
 export const getAllUsers = () => {
     return axiosClient.get("/admin/users");
 };
+
+export const getAllProgramLevels = () => axiosClient.get("/admin/academic/levels");
+export const createProgramLevel = (name) => axiosClient.post("/admin/academic/levels", { name });
+
+export const getAllStudyYears = () => axiosClient.get("/admin/academic/study-years");
+export const createStudyYear = (name) => axiosClient.post("/admin/academic/study-years", { name });

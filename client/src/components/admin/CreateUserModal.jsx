@@ -3,6 +3,7 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import toast from "react-hot-toast";
 import { createUser } from "../../services/admin/userApi.js";
+import { useAuth } from '../../hooks/useAuth.js';
 
 const CreateUserModal = ({ onClose, onUserCreated }) => {
     const [isLoading, setIsLoading] = useState(false);
@@ -18,6 +19,7 @@ const CreateUserModal = ({ onClose, onUserCreated }) => {
         studentType: "STANDARD", // Default vrijednost
         facultyType: "PROFESSOR" // Default vrijednost
     });
+    const { user } = useAuth();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -59,8 +61,15 @@ const CreateUserModal = ({ onClose, onUserCreated }) => {
                         <label className="text-sm font-medium text-gray-600">Uloga</label>
                         <select name="role" value={formData.role} onChange={handleChange} className="px-4 py-2 border border-gray-200 rounded-xl">
                             <option value="STUDENT">Student</option>
-                            <option value="FACULTY">Nastavno osoblje</option>
-                            <option value="ADMIN">Admin</option>
+                            {user?.role === 'SUPER_ADMIN' && (
+                                <>
+                                    <option value="FACULTY">Nastavno osoblje</option>
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="DEAN">Dekan</option>
+                                    <option value="VICE_DEAN">Prodekan</option>
+                                    <option value="SECRETARY">Sekretar</option>
+                                </>
+                            )}
                         </select>
                     </div>
 

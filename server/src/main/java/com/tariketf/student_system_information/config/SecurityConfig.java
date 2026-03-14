@@ -49,6 +49,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET,
+                                "/api/admin/academic/courses",
+                                "/api/admin/academic/years").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("SUPER_ADMIN", "ADMIN")
                         .requestMatchers("/api/faculty/**").hasAnyRole("FACULTY", "SUPER_ADMIN", "ADMIN")
                         .requestMatchers("/api/student/**").hasAnyRole("STUDENT", "SUPER_ADMIN", "ADMIN")
@@ -57,8 +60,6 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
-                // --- LOGOUT KONFIGURACIJA ---
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .addLogoutHandler(logoutHandler)

@@ -19,4 +19,23 @@ axiosClient.interceptors.request.use(
     }
 );
 
+axiosClient.interceptors.response.use(
+    (response) => {
+        const authHeader = response.headers['authorization'];
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+            const newToken = authHeader.substring(7);
+            localStorage.setItem('authToken', newToken);
+        }
+        return response;
+    },
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
+            window.location.href = '/login';
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default axiosClient;
